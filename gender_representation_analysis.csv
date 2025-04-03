@@ -1,0 +1,4 @@
+year,disease,trial_female_percentage,population_female_percentage,representation_gap
+1994,HIV,12.00,51.00,39.00
+2015,Ebola,22.00,50.80,28.80
+2020,COVID-19,45.00,50.50,5.50

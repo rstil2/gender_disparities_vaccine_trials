@@ -1,0 +1,62 @@
+"""Generate figure comparing trial participation rates with US Census data."""
+
+import pandas as pd
+import numpy as np
+from pathlib import Path
+import logging
+from typing import Dict, Tuple
+
+from visualization.plots import plot_census_comparison
+
+def setup_logging():
+    """Configure logging."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+
+def load_trial_data(data_path: Path) -> Dict[str, float]:
+    """Load and process trial participation data."""
+    df = pd.read_csv(data_path)
+    # Aggregate participation rates by disease
+    participation_rates = df.groupby('disease')['female_participation'].mean().to_dict()
+    return participation_rates
+
+def load_census_data(data_path: Path) -> Dict[int, float]:
+    """Load processed census data."""
+    df = pd.read_csv(data_path)
+    return dict(zip(df['year'], df['female_percentage']))
+
+def main():
+    """Main function to generate comparison figure."""
+    setup_logging()
+    
+    # Set up paths
+    data_dir = Path('data')
+    figures_dir = Path('figures')
+    figures_dir.mkdir(exist_ok=True)
+    
+    try:
+        # Load trial data
+        trial_data = load_trial_data(data_dir / 'processed' / 'trial_participation.csv')
+        
+        # Load census data
+        census_data = load_census_data(data_dir / 'census' / 'processed_census_data.csv')
+        
+        # Generate comparison figure
+        output_path = figures_dir / 'Figure2_census_comparison.png'
+        plot_census_comparison(
+            trial_data=trial_data,
+            census_data=census_data,
+            save_path=output_path
+        )
+        
+        logging.info(f"Successfully generated census comparison figure: {output_path}")
+        
+    except Exception as e:
+        logging.error(f"Error generating census comparison figure: {str(e)}")
+        raise
+
+if __name__ == '__main__':
+    main()
+

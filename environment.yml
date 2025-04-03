@@ -1,0 +1,19 @@
+name: gender-analysis
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - pymc=5.0.2
+  - arviz
+  - matplotlib
+  - seaborn
+  - pytest
+  - jupyter
+  - pip
+  - pip:
+    - black
+    - flake8
+    - mypy
